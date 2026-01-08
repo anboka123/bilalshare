@@ -1,0 +1,26 @@
+name: Unzip Android Project
+
+on:
+  workflow_dispatch:
+
+jobs:
+  unzip:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Unzip project
+        run: |
+          unzip bilalshare-android.zip
+          shopt -s dotglob
+          mv bilalshare-android/* .
+          rm -rf bilalshare-android bilalshare-android.zip
+
+      - name: Commit extracted files
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "Extract Android project from zip"
+          git push
