@@ -8,14 +8,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Unzip project
+      - name: Unzip Android project
         run: |
           unzip bilalshare-android.zip
+          PROJECT_DIR=$(find . -type d -name app | head -n 1 | xargs dirname)
+          echo "Project directory: $PROJECT_DIR"
           shopt -s dotglob
-          mv bilalshare-android/* .
-          rm -rf bilalshare-android bilalshare-android.zip
+          mv "$PROJECT_DIR"/* .
+          rm -rf "$PROJECT_DIR" bilalshare-android.zip
 
       - name: Commit extracted files
         run: |
