@@ -8,22 +8,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Unzip Android project
+      - name: Unzip project (auto-detect)
         run: |
           unzip bilalshare-android.zip
-          PROJECT_DIR=$(find . -type d -name app | head -n 1 | xargs dirname)
-          echo "Project directory: $PROJECT_DIR"
+          PROJECT_DIR=$(ls -d */ | head -n 1)
+          echo "Found project folder: $PROJECT_DIR"
           shopt -s dotglob
-          mv "$PROJECT_DIR"/* .
-          rm -rf "$PROJECT_DIR" bilalshare-android.zip
+          mv "$PROJECT_DIR"* .
+          rm -rf "$PROJECT_DIR"
 
       - name: Commit extracted files
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add .
-          git commit -m "Extract Android project from zip"
+          git commit -m "Extract Android project"
           git push
